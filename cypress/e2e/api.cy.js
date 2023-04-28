@@ -48,7 +48,6 @@ describe('API', () => {
 			let deckJson = functions.stringify(deckTest.body)
 			cy.log(deckJson)
 		})
-		})
 	})
 
 	it('Shuffle the deck', () => {
