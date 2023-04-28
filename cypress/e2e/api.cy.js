@@ -30,11 +30,24 @@ describe('API', () => {
 		//In this test I just create e new deck separated from the one created on "before" Section
 
 		cy.request('https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1').then((response) => {
+			cy.request('https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1').then((response) => {
 			expect(response.status).to.eq(200)
 			expect(response.body).to.have.property('success', true)
 			expect(response.body).to.have.property('deck_id')
 			expect(response.body).to.have.property('shuffled', true)
 			expect(response.body).to.have.property('remaining', 52)
+			let id = response.body.deck_id
+
+			let JSONValidation = {"success":true,"deck_id":id,"remaining":52,"shuffled":true}
+			expect(response.body).to.deep.equal(JSONValidation)
+
+			cy.wrap(response).as('deckTest')
+		})
+
+		cy.get('@deckTest').then((deckTest) => {
+			let deckJson = functions.stringify(deckTest.body)
+			cy.log(deckJson)
+		})
 		})
 	})
 
